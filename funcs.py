@@ -65,7 +65,7 @@ def after_register():
     return resp
 
 def unsuccessful_login():
-    print("Username not found. Please 1) register or 2) exit")
+    print("Username not found. Please 1) try logging in again 2) register or 3) exit")
     resp = input()
     return resp
 
@@ -131,13 +131,15 @@ def login():
     else:
         resp = unsuccessful_login()
         if int(resp) == 1:
+            login_true_msg()
+        elif int(resp) == 2:
             if register() == True:
                 resp = after_register()
                 if int(resp) == 1:
                     login_true_msg()
                 elif int(resp) == 2:
                     exit()
-        if int(resp) == 2:
+        elif int(resp) == 3:
             exit()
 
     return False
