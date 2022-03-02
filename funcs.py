@@ -71,8 +71,31 @@ def unsuccessful_login():
 
 def login_true_msg():
         if login() == True:
-            print("You are now logged in. Welcome")
+            print("You are now logged in. Welcome.")
+            print('Please choose an option by typing the corresponding number in and pressing enter:')
+            print("1) add birthday")
+            print("2) edit birthday")
+            print("3) exit")
+            resp = int(input())
+            return resp
 
+def add_birthday():
+    user
+    usernames = open_file('usernames.txt', 'r')
+    passwords = open_file('passwords.txt', 'r')
+    birthdays = open_file('birthdays.txt', 'r')
+    print("Please enter your birthday in MM/DD/YYYY format")
+    birthday = input()
+    username
+
+def username_occur(username):
+    usernames = open_file('usernames.txt', 'r')
+    i = 1
+    for line in usernames:
+        if username == line.strip():
+            break
+        i = i + 1
+    return i
 
 def main():
     resp = startmenu()
@@ -84,18 +107,29 @@ def main():
             elif int(resp) == 2:
                 exit()
     if int(resp) == 2:
-        login_true_msg()
+        resp = login_true_msg()
+        if resp == 1:
+            add_birthday()
+        if resp == 2:
+            edit_birthday()
+        if resp == 3:
+            exit()
+
 
 
 def register():
     usernames = open_file('usernames.txt', 'a')
     passwords = open_file('passwords.txt', 'a')
+    birthdays = open_file('birthdays.txt', 'w')
     username = username_create()
     password = password_create()
+    birthday = ''
     usernames.write('{0}'.format(username + '\n'))
     passwords.write('{0}'.format(password + '\n'))
+    birthdays.write('{0}'.format(birthday + '\n'))
     usernames.close()
     passwords.close()
+    birthdays.close()
     return True
 
 def login():
