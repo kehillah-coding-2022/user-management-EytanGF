@@ -9,7 +9,10 @@ def close_file(filename):
 def startmenu():
     print("Hi, welcome to user management. Press enter to begin.")
     input()
-    print("Would you like to 1) register or 2) login")
+    print("Would you like to:")
+    print('1) register')
+    print('2) login')
+    print('3) exit')
     resp = input()
     return resp
 
@@ -60,30 +63,38 @@ def password_create():
     return password
 
 def after_register():
-    print("You are now registered. Would you like to 1) login to your account or 2) exit")
+    print("You are now registered. Would you like to:")
+    print("1) login to your account")
+    print('2) exit')
     resp = input()
     return resp
 
 def unsuccessful_login():
-    print("Username not found. Please 1) try logging in again 2) register or 3) exit")
+    print("Username not found. Choose an option:")
+    print("1) try logging in again")
+    print("2) register an account")
+    print("3) exit")
     resp = input()
     return resp
 
 def login_true_msg():
-        if login() == True:
-            print("You are now logged in. Welcome.")
-            print("")
-            print('Please choose an option by typing the corresponding number and pressing enter:')
-            print("1) add/edit birthday")
-            print('2) view birthday')
-            print("3) exit")
-            resp = int(input())
-            if resp == 1:
-                add_edit_birthday()
-            if resp == 2:
-                view_birthday()
-            if resp == 3:
-                exit()
+    if login() == True:
+        print("You are now logged in. Welcome.")
+        birthday_menu()
+
+def birthday_menu():
+        print("")
+        print('Please choose an option by typing the corresponding number and pressing enter:')
+        print("1) add/edit birthday")
+        print('2) view birthday')
+        print("3) exit")
+        resp = int(input())
+        if resp == 1:
+            add_edit_birthday()
+        if resp == 2:
+            view_birthday()
+        if resp == 3:
+            exit()
 
 def add_edit_birthday():
     birthdays = open_file('birthdays.txt', 'r')
@@ -98,7 +109,16 @@ def add_edit_birthday():
     print("Thank you")
     main()
 
-def
+def view_birthday():
+    birthdays = open_file('birthdays.txt', 'r')
+    birthdays_list = birthdays.readlines()
+    birthdays.close()
+    if birthdays_list[i-1] == 'a\n':
+        print("Sorry, you haven't created a username yet.")
+        birthday_menu()
+    else:
+        print('Your birthday is:' + birthdays_list[i-1])
+
 
 
 
@@ -122,6 +142,8 @@ def main():
                 exit()
     if int(resp) == 2:
         login_true_msg()
+    if int(resp) == 3:
+        exit()
 
 
 
