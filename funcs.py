@@ -72,21 +72,35 @@ def unsuccessful_login():
 def login_true_msg():
         if login() == True:
             print("You are now logged in. Welcome.")
-            print('Please choose an option by typing the corresponding number in and pressing enter:')
-            print("1) add birthday")
-            print("2) edit birthday")
+            print("")
+            print('Please choose an option by typing the corresponding number and pressing enter:')
+            print("1) add/edit birthday")
+            print('2) view birthday')
             print("3) exit")
             resp = int(input())
-            return resp
+            if resp == 1:
+                add_edit_birthday()
+            if resp == 2:
+                view_birthday()
+            if resp == 3:
+                exit()
 
-def add_birthday():
-    user
-    usernames = open_file('usernames.txt', 'r')
-    passwords = open_file('passwords.txt', 'r')
+def add_edit_birthday():
     birthdays = open_file('birthdays.txt', 'r')
-    print("Please enter your birthday in MM/DD/YYYY format")
-    birthday = input()
-    username
+    birthdays_list = birthdays.readlines()
+    birthdays.close()
+    print("Please enter what you want your birthday to be saved as in MM/DD/YYYY format")
+    birthday = str(input())
+    birthdays1 = open_file('birthdays.txt', 'w')
+    birthdays_list[i-1] = birthday
+    birthdays1.writelines(birthdays_list)
+    birthdays1.close()
+    print("Thank you")
+    main()
+
+def
+
+
 
 def username_occur(username):
     usernames = open_file('usernames.txt', 'r')
@@ -107,13 +121,7 @@ def main():
             elif int(resp) == 2:
                 exit()
     if int(resp) == 2:
-        resp = login_true_msg()
-        if resp == 1:
-            add_birthday()
-        if resp == 2:
-            edit_birthday()
-        if resp == 3:
-            exit()
+        login_true_msg()
 
 
 
@@ -123,7 +131,7 @@ def register():
     birthdays = open_file('birthdays.txt', 'w')
     username = username_create()
     password = password_create()
-    birthday = ''
+    birthday = 'a'
     usernames.write('{0}'.format(username + '\n'))
     passwords.write('{0}'.format(password + '\n'))
     birthdays.write('{0}'.format(birthday + '\n'))
@@ -137,6 +145,7 @@ def login():
     username = input()
     usernames = open_file('usernames.txt', 'r')
     passwords = open_file('passwords.txt', 'r')
+    global i
     i = 1
     username_matched = False
     for line in usernames:
@@ -147,6 +156,7 @@ def login():
     if username_matched == True:
         print('Please enter your password, case sensitive')
         password = input()
+        global j
         j = 1
         for pline in passwords:
             if j == i:
