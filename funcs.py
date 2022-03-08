@@ -107,7 +107,18 @@ def add_edit_birthday():
     birthdays1.writelines(birthdays_list)
     birthdays1.close()
     print("Thank you")
-    main()
+    print("")
+    print("Please select an option:")
+    print("1) Go back to main menu")
+    print("2) Go to birthday menu")
+    print("3) Exit")
+    resp = int(input())
+    if resp == 1:
+        main()
+    if resp == 2:
+        birthday_menu()
+    if resp == 3:
+        exit()
 
 def view_birthday():
     birthdays = open_file('birthdays.txt', 'r')
@@ -150,13 +161,17 @@ def main():
 def register():
     usernames = open_file('usernames.txt', 'a')
     passwords = open_file('passwords.txt', 'a')
-    birthdays = open_file('birthdays.txt', 'w')
+    birthdays = open_file('birthdays.txt', 'a+')
     username = username_create()
     password = password_create()
-    birthday = 'a'
     usernames.write('{0}'.format(username + '\n'))
     passwords.write('{0}'.format(password + '\n'))
-    birthdays.write('{0}'.format(birthday + '\n'))
+    data = birthdays.read()
+    if len(data) > 0:
+        birthdays.write('{0}'.format('\n' + 'a\n'))
+        counter = counter + 1
+    else:
+        birthdays.write('{0}'.format('a\n'))
     usernames.close()
     passwords.close()
     birthdays.close()
