@@ -81,8 +81,68 @@ def unsuccessful_login():
 
 def login_true_msg():
     if login() == True:
+        print('')
         print("You are now logged in. Welcome.")
-        birthday_menu()
+        print('')
+        print('Select an option')
+        print('1) birthday menu')
+        print('2) delete your account')
+        print('3) exit')
+        resp = int(input)
+        if resp == 1:
+            birthday_menu()
+        if resp == 2:
+            delete_account()
+        if resp == 3:
+            exit()
+
+
+def delete_account():
+    delete_true = False
+    while delete_true == False:
+        print('')
+        print("To delete your account please type in 'delete', case sensitive")
+        resp = str(input())
+        if resp == 'delete':
+            delete_true = True
+        else:
+            print('Please try again')
+
+    usernames = open_file('usernames.txt', 'r')
+    passwords = open_file('passwords.txt', 'r')
+    birthdays = open_file('birthdays.txt', 'r')
+    usernames_list = usernames.readlines()
+    passwords_list = passwords.readlines()
+    birthdays_list = birthdays.readlines()
+    usernames.close()
+    passwords.close()
+    birthdays.close()
+    usernames = open_file('usernames.txt', 'a')
+    passwords = open_file('passwords.txt', 'a')
+    birthdays = open_file('birthdays.txt', 'a+')
+    del birthdays_list[i-1]
+    del passwords_list[i-1]
+    del usernames_list[i-1]
+    usernames.writelines(usernames_list)
+    passwords.writelines(passwords_list)
+    birthdays.writelines(birthdays_list)
+    usernames.close()
+    passwords.close()
+    birthdays.close()
+    print("")
+    print('Your account has been deleted.')
+    print('')
+    print('Please select an option:')
+    print('1) Main menu')
+    print('2) Exit')
+    resp = int(input)
+    if resp == 1:
+        main()
+    if resp == 2:
+        exit()
+
+
+
 
 def birthday_menu():
         print("")
@@ -183,12 +243,6 @@ def register():
     hash = hashlib.md5(password.encode('utf-8')).hexdigest()
     usernames.write('{0}'.format(username + '\n'))
     passwords.write('{0}'.format(hash + '\n'))
-    data = birthdays.read()
-    # if len(data) > 0:
-    #     birthdays.write('{0}'.format('\n' + 'a\n'))
-    #     counter = counter + 1
-    # else:
-    #     birthdays.write('{0}'.format('a\n'))
     birthdays.write('{0}'.format('a\n'))
     usernames.close()
     passwords.close()
