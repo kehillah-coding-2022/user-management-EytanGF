@@ -117,7 +117,7 @@ def view_birthday():
         print("Sorry, you haven't created a username yet.")
         birthday_menu()
     else:
-        print('Your birthday is:' + birthdays_list[i-1])
+        print('Your birthday is: ' + birthdays_list[i-1])
 
 
 
