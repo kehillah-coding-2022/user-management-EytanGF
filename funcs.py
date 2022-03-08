@@ -1,3 +1,5 @@
+import hashlib
+
 
 def open_file(filename, mode):
     myFile = open(filename, mode)
@@ -103,7 +105,7 @@ def add_edit_birthday():
     print("Please enter what you want your birthday to be saved as in MM/DD/YYYY format")
     birthday = str(input())
     birthdays1 = open_file('birthdays.txt', 'w')
-    birthdays_list[i-1] = birthday
+    birthdays_list[i-1] = (birthday + '\n')
     birthdays1.writelines(birthdays_list)
     birthdays1.close()
     print("Thank you")
@@ -129,6 +131,20 @@ def view_birthday():
         birthday_menu()
     else:
         print('Your birthday is: ' + birthdays_list[i-1])
+        print("")
+        print("Please select an option:")
+        print("1) Go back to main menu")
+        print("2) Go to birthday menu")
+        print("3) Exit")
+        resp = int(input())
+        if resp == 1:
+            main()
+        if resp == 2:
+            birthday_menu()
+        if resp == 3:
+            exit()
+
+
 
 
 
@@ -164,14 +180,16 @@ def register():
     birthdays = open_file('birthdays.txt', 'a+')
     username = username_create()
     password = password_create()
+    hash = hashlib.md5(password.encode('utf-8')).hexdigest()
     usernames.write('{0}'.format(username + '\n'))
-    passwords.write('{0}'.format(password + '\n'))
+    passwords.write('{0}'.format(hash + '\n'))
     data = birthdays.read()
-    if len(data) > 0:
-        birthdays.write('{0}'.format('\n' + 'a\n'))
-        counter = counter + 1
-    else:
-        birthdays.write('{0}'.format('a\n'))
+    # if len(data) > 0:
+    #     birthdays.write('{0}'.format('\n' + 'a\n'))
+    #     counter = counter + 1
+    # else:
+    #     birthdays.write('{0}'.format('a\n'))
+    birthdays.write('{0}'.format('a\n'))
     usernames.close()
     passwords.close()
     birthdays.close()
@@ -193,6 +211,7 @@ def login():
     if username_matched == True:
         print('Please enter your password, case sensitive')
         password = input()
+        hash = hashlib.md5(password.encode('utf-8')).hexdigest()
         global j
         j = 1
         for pline in passwords:
@@ -201,7 +220,7 @@ def login():
                 break
             j = j + 1
 
-        if password == sought_password:
+        if hash == sought_password:
             return True
         else:
             print('Incorrect password, please try again.')
