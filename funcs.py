@@ -1,4 +1,6 @@
 import hashlib
+import random
+import smtplib, ssl
 
 
 def open_file(filename, mode):
@@ -22,7 +24,7 @@ def check_username(entered_username):
     usernames = open_file('usernames.txt', 'r')
     for line in usernames:
         if entered_username == line.strip():
-            print("Sorry, that username is already taken. Please enter a different username")
+            print("Sorry, that email is already taken. Please enter a different username")
             return False
         else:
             return True
@@ -38,16 +40,17 @@ def check_password(entered_password):
 
 def username_create():
     usernames = open_file('usernames.txt', 'r')
-    print("Please enter a username")
-    username = input()
+    print("Please enter an email")
+    global username1
+    username1 = input()
     status = False
     while status == False:
-        status = check_username(username)
+        status = check_username(username1)
         if status == False:
-            username = input()
+            username1 = input()
         else:
             status = True
-    return username
+    return username1
 
 def password_create():
     print("Please enter an 8 or more character password")
@@ -72,7 +75,7 @@ def after_register():
     return resp
 
 def unsuccessful_login():
-    print("Username not found. Choose an option:")
+    print("Email not found. Choose an option:")
     print("1) try logging in again")
     print("2) register an account")
     print("3) exit")
@@ -187,7 +190,7 @@ def view_birthday():
     birthdays_list = birthdays.readlines()
     birthdays.close()
     if birthdays_list[i-1] == 'a\n':
-        print("Sorry, you haven't created a username yet.")
+        print("Sorry, you haven't entered a birthday yet.")
         birthday_menu()
     else:
         print('Your birthday is: ' + birthdays_list[i-1])
@@ -238,9 +241,9 @@ def register():
     usernames = open_file('usernames.txt', 'a')
     passwords = open_file('passwords.txt', 'a')
     birthdays = open_file('birthdays.txt', 'a+')
+    codes = open_file('recoverycodes.txt', 'a')
     username = username_create()
     password = password_create()
-    hash = hashlib.md5(password.encode('utf-8')).hexdigest()
     usernames.write('{0}'.format(username + '\n'))
     passwords.write('{0}'.format(hash + '\n'))
     birthdays.write('{0}'.format('a\n'))
@@ -249,12 +252,87 @@ def register():
     birthdays.close()
     return True
 
+
+def emailsend(receiver_email, sender_email, password, subject, msg):
+    """
+    given the receivers email, password, subject, and message, send an email to the receiver.
+    """
+    email_sent = False
+    smtp_server = "smtp.gmail.com"
+    messagebody = ("Your recovery code is " + (msg))
+    message = 'Subject: {}\n\n{}'.format(subject, messagebody)
+    port = 587
+    context = ssl.create_default_context()
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.starttls(context=context)
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+        email_sent = True
+    return email_sent
+
+def reset_email_password():
+    emails = open_file('usernames.txt', 'r')
+    passwords = open_file('passwords.txt', 'r')
+    emails_list = emails.readlines()
+    passwords_list = passwords.readlines()
+    emails.close()
+    passwords.close()
+    print("Please enter your new email")
+    email = str(input())
+    emails1 = open_file('emails.txt', 'w')
+    emails_list[i-1] = (email + '\n')
+    emails1.writelines(emails_list)
+    emails1.close()
+    print("Please enter your new password")
+    password = str(input())
+    hash = hashlib.md5(password.encode('utf-8')).hexdigest()
+    passwords1 = open_file('passwords.txt', 'w')
+    passwords_list[i-1] = (hash + '\n')
+    passwords1.writelines(passwords_list)
+    passwords1.close()
+    print("Thank you")
+    print("")
+    print("Please select an option:")
+    print("1) Go back to main menu")
+    print("2) Exit")
+    resp = int(input())
+    if resp == 1:
+        main()
+    if resp == 2:
+        exit()
+
+
+def code_create(n):
+    range_start = 10**(n-1)
+    range_end = (10**n)-1
+    print(random.randint(range_start, range_end))
+
+
 def login():
-    print("Please enter your username, case sensitive")
+    print('If you forgot your email or password, press 1. Else, press 2.')
+    resp = int(input())
+    if resp == 1:
+        emails = open_file('usernames.txt', 'r')
+        # global i
+        # i = 1
+        # username_matched = False
+        # for line in emails:
+        #     if username == line.strip():
+        #         username_matched = True
+        #         break
+        #     i = i + 1
+        emails_list = emails.readlines()
+        email = emails_list[i-1]
+        emails.close()
+        msg = code_create(6)
+        if emailsend(email, 'pythonacctrecov@gmail.com', 'password1234!', 'Account Recovery Code', msg) == True:
+            reset_email_password()
+    if resp == 2:
+        pass
+    print("Please enter your email, case sensitive")
     username = input()
     usernames = open_file('usernames.txt', 'r')
     passwords = open_file('passwords.txt', 'r')
-    global i
     i = 1
     username_matched = False
     for line in usernames:
