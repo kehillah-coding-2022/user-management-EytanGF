@@ -41,7 +41,6 @@ def check_password(entered_password):
 def username_create():
     usernames = open_file('usernames.txt', 'r')
     print("Please enter an email")
-    global username1
     username1 = input()
     status = False
     while status == False:
@@ -91,7 +90,7 @@ def login_true_msg():
         print('1) birthday menu')
         print('2) delete your account')
         print('3) exit')
-        resp = int(input)
+        resp = int(input())
         if resp == 1:
             birthday_menu()
         if resp == 2:
@@ -270,7 +269,30 @@ def emailsend(receiver_email, sender_email, password, subject, msg):
         email_sent = True
     return email_sent
 
+def code_input_loop(code_input):
+    code_verified = False
+    attempts = 3
+    while attempts > 0 and code_verified == False:
+        if str(code_input) == str(msg):
+            code_verified = True
+            print('Verified')
+            print('')
+            print('Working...')
+            print('')
+        elif attempts == 0:
+            print('Maximum password attemps reached. Sorry.')
+            exit()
+        else:
+            print('Incorrect recovery code, please try again.')
+            password = input()
+            attempts = attempts - 1
+
+
 def reset_email_password():
+    print('Please enter your recovery code')
+    code = input()
+    if code_input_loop(code) == True:
+        pass
     emails = open_file('usernames.txt', 'r')
     passwords = open_file('passwords.txt', 'r')
     emails_list = emails.readlines()
@@ -287,7 +309,7 @@ def reset_email_password():
     password = str(input())
     hash = hashlib.md5(password.encode('utf-8')).hexdigest()
     passwords1 = open_file('passwords.txt', 'w')
-    passwords_list[i-1] = (hash + '\n')
+    passwords_list[z-1] = (hash + '\n')
     passwords1.writelines(passwords_list)
     passwords1.close()
     print("Thank you")
@@ -305,27 +327,20 @@ def reset_email_password():
 def code_create(n):
     range_start = 10**(n-1)
     range_end = (10**n)-1
-    print(random.randint(range_start, range_end))
+    return random.randint(range_start, range_end)
 
 
 def login():
     print('If you forgot your email or password, press 1. Else, press 2.')
     resp = int(input())
     if resp == 1:
-        emails = open_file('usernames.txt', 'r')
-        # global i
-        # i = 1
-        # username_matched = False
-        # for line in emails:
-        #     if username == line.strip():
-        #         username_matched = True
-        #         break
-        #     i = i + 1
-        emails_list = emails.readlines()
-        email = emails_list[i-1]
-        emails.close()
+        print("Please enter the email that you want to send this recovery to")
+        email = input()
+        global msg
         msg = code_create(6)
-        if emailsend(email, 'pythonacctrecov@gmail.com', 'password1234!', 'Account Recovery Code', msg) == True:
+        print(msg)
+        str_msg = str(msg)
+        if emailsend(email, 'pythonacctrecov@gmail.com', 'password1234!', 'Account Recovery Code', str_msg) == True:
             reset_email_password()
     if resp == 2:
         pass
@@ -333,6 +348,7 @@ def login():
     username = input()
     usernames = open_file('usernames.txt', 'r')
     passwords = open_file('passwords.txt', 'r')
+    global i
     i = 1
     username_matched = False
     for line in usernames:
