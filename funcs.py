@@ -270,46 +270,47 @@ def emailsend(receiver_email, sender_email, password, subject, msg):
     return email_sent
 
 def code_input_loop(code_input):
-    code_verified = False
     attempts = 3
-    while attempts > 0 and code_verified == False:
+    while attempts > 0:
         if str(code_input) == str(msg):
-            code_verified = True
             print('Verified')
             print('')
             print('Working...')
             print('')
+            return True
         elif attempts == 0:
             print('Maximum password attemps reached. Sorry.')
+            return Falses
             exit()
-        else:
-            print('Incorrect recovery code, please try again.')
-            password = input()
-            attempts = attempts - 1
+        print('Incorrect recovery code, please try again.')
+        password = input()
+        attempts = attempts - 1
 
 
-def reset_email_password():
-    print('Please enter your recovery code')
+def reset_email_password(email):
+    print('')
+    print('The recovery code has been sent, please check your email.')
+    print('')
+    print('Please enter your recovery code that was sent to: ' + email)
     code = input()
     if code_input_loop(code) == True:
         pass
     emails = open_file('usernames.txt', 'r')
     passwords = open_file('passwords.txt', 'r')
-    emails_list = emails.readlines()
     passwords_list = passwords.readlines()
+    global i
+    i = 1
+    username_matched = False
+    for line in emails:
+        if email == line.strip():
+            username_matched = True
+            break
+        i = i + 1
     emails.close()
     passwords.close()
-    print("Please enter your new email")
-    email = str(input())
-    emails1 = open_file('emails.txt', 'w')
-    emails_list[i-1] = (email + '\n')
-    emails1.writelines(emails_list)
-    emails1.close()
-    print("Please enter your new password")
-    password = str(input())
-    hash = hashlib.md5(password.encode('utf-8')).hexdigest()
+    password = password_create()
     passwords1 = open_file('passwords.txt', 'w')
-    passwords_list[z-1] = (hash + '\n')
+    passwords_list[i-1] = (password + '\n')
     passwords1.writelines(passwords_list)
     passwords1.close()
     print("Thank you")
@@ -331,17 +332,16 @@ def code_create(n):
 
 
 def login():
-    print('If you forgot your email or password, press 1. Else, press 2.')
+    print('If you forgot your password, press 1. Else, press 2.')
     resp = int(input())
     if resp == 1:
-        print("Please enter the email that you want to send this recovery to")
+        print("Please enter your email")
         email = input()
         global msg
         msg = code_create(6)
-        print(msg)
         str_msg = str(msg)
         if emailsend(email, 'pythonacctrecov@gmail.com', 'password1234!', 'Account Recovery Code', str_msg) == True:
-            reset_email_password()
+            reset_email_password(email)
     if resp == 2:
         pass
     print("Please enter your email, case sensitive")
