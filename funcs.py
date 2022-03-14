@@ -4,13 +4,22 @@ import smtplib, ssl
 
 
 def open_file(filename, mode):
+    """
+    Given a filename and a desired mode to open it in, open that file in that mode
+    """
     myFile = open(filename, mode)
     return myFile
 
 def close_file(filename):
+    """
+    given a file, close that file
+    """
     close(filename)
 
 def startmenu():
+    """
+    give user 3 options for first experience
+    """
     print("Hi, welcome to user management. Press enter to begin.")
     input()
     print("Would you like to:")
@@ -21,6 +30,9 @@ def startmenu():
     return resp
 
 def check_username(entered_username):
+    """
+    given a username inputted by the user, check if that username is already taken
+    """
     usernames = open_file('usernames.txt', 'r')
     for line in usernames:
         if entered_username == line.strip():
@@ -30,6 +42,9 @@ def check_username(entered_username):
             return True
 
 def check_password(entered_password):
+    '''
+    given a password entered by the user, check if that password is already taken
+    '''
     passwords = open_file('passwords.txt', 'r')
     for line in passwords:
         if entered_password == line.strip():
@@ -39,6 +54,9 @@ def check_password(entered_password):
         return True
 
 def username_create():
+    """
+    create and return username, call check username function to check that username is unique
+    """
     usernames = open_file('usernames.txt', 'r')
     print("Please enter an email")
     username1 = input()
@@ -52,6 +70,9 @@ def username_create():
     return username1
 
 def password_create():
+    """
+    create and return password, call check password function to check that password is unique
+    """
     print("Please enter an 8 or more character password")
     password = input()
     while len(password) < 8:
@@ -68,6 +89,9 @@ def password_create():
     return hashed
 
 def after_register():
+    '''
+    user menu that activates after a user has registered an account
+    '''
     print("You are now registered. Would you like to:")
     print("1) login to your account")
     print('2) exit')
@@ -75,6 +99,9 @@ def after_register():
     return resp
 
 def unsuccessful_login():
+    '''
+    give user menu if their email wasn't found in the system
+    '''
     print("Email not found. Choose an option:")
     print("1) try logging in again")
     print("2) register an account")
@@ -83,6 +110,9 @@ def unsuccessful_login():
     return resp
 
 def login_true_msg():
+    '''
+    after-successful-login menu
+    '''
     if login() == True:
         print('')
         print("You are now logged in. Welcome.")
@@ -101,6 +131,9 @@ def login_true_msg():
 
 
 def delete_account():
+    '''
+    delete a user's account and all of their stored data
+    '''
     delete_true = False
     while delete_true == False:
         print('')
@@ -148,20 +181,26 @@ def delete_account():
 
 
 def birthday_menu():
-        print("")
-        print('Please choose an option by typing the corresponding number and pressing enter:')
-        print("1) add/edit birthday")
-        print('2) view birthday')
-        print("3) exit")
-        resp = int(input())
-        if resp == 1:
-            add_edit_birthday()
-        if resp == 2:
-            view_birthday()
-        if resp == 3:
-            exit()
+    '''
+    give user birthday menu options and interactive ability
+    '''
+    print("")
+    print('Please choose an option by typing the corresponding number and pressing enter:')
+    print("1) add/edit birthday")
+    print('2) view birthday')
+    print("3) exit")
+    resp = int(input())
+    if resp == 1:
+        add_edit_birthday()
+    if resp == 2:
+        view_birthday()
+    if resp == 3:
+        exit()
 
 def add_edit_birthday():
+    '''
+    add/edit user's birthday
+    '''
     birthdays = open_file('birthdays.txt', 'r')
     birthdays_list = birthdays.readlines()
     birthdays.close()
@@ -186,6 +225,9 @@ def add_edit_birthday():
         exit()
 
 def view_birthday():
+    '''
+    let user view birthday
+    '''
     birthdays = open_file('birthdays.txt', 'r')
     birthdays_list = birthdays.readlines()
     birthdays.close()
@@ -213,6 +255,9 @@ def view_birthday():
 
 
 def username_occur(username):
+    '''
+    check if username is unique
+    '''
     usernames = open_file('usernames.txt', 'r')
     i = 1
     for line in usernames:
@@ -222,6 +267,9 @@ def username_occur(username):
     return i
 
 def main():
+    '''
+    main function
+    '''
     resp = startmenu()
     if int(resp) == 1:
         if register() == True:
@@ -238,6 +286,9 @@ def main():
 
 
 def register():
+    '''
+    register a user
+    '''
     usernames = open_file('usernames.txt', 'a')
     passwords = open_file('passwords.txt', 'a')
     birthdays = open_file('birthdays.txt', 'a+')
@@ -271,6 +322,9 @@ def emailsend(receiver_email, sender_email, password, subject, msg):
     return email_sent
 
 def code_input_loop(code_input):
+    '''
+    given an inputted verification code to recover an account, make sure that they only have 3 chances
+    '''
     attempts = 3
     while attempts > 0:
         if str(code_input) == str(msg):
@@ -288,7 +342,10 @@ def code_input_loop(code_input):
         attempts = attempts - 1
 
 
-def reset_email_password(email):
+def reset_password(email):
+    '''
+    given a user's email, reset their password
+    '''
     print('')
     print('The recovery code has been sent, please check your email.')
     print('')
@@ -327,12 +384,18 @@ def reset_email_password(email):
 
 
 def code_create(n):
+    '''
+    given n, create a random code with n digits
+    '''
     range_start = 10**(n-1)
     range_end = (10**n)-1
     return random.randint(range_start, range_end)
 
 
 def login():
+    '''
+    login the user
+    '''
     print('If you forgot your password, press 1. Else, press 2.')
     resp = int(input())
     if resp == 1:
@@ -342,7 +405,7 @@ def login():
         msg = code_create(6)
         str_msg = str(msg)
         if emailsend(email, 'pythonacctrecov@gmail.com', 'password1234!', 'Account Recovery Code', str_msg) == True:
-            reset_email_password(email)
+            reset_password(email)
     if resp == 2:
         pass
     print("Please enter your email, case sensitive")
@@ -394,6 +457,9 @@ def login():
 
 
 def password_loop(password, sought_password):
+    '''
+    given an inputted password and the actual password, make sure that the user only has three tries to input the password, and then the code locks
+    '''
     attempts = 3
     hash = hashlib.md5(password.encode('utf-8')).hexdigest()
     while attempts > 0:
