@@ -249,23 +249,6 @@ def view_birthday():
         if resp == 3:
             exit()
 
-
-
-
-
-
-def username_occur(username):
-    '''
-    check if username is unique
-    '''
-    usernames = open_file('usernames.txt', 'r')
-    i = 1
-    for line in usernames:
-        if username == line.strip():
-            break
-        i = i + 1
-    return i
-
 def main():
     '''
     main function
