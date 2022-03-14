@@ -292,7 +292,6 @@ def register():
     usernames = open_file('usernames.txt', 'a')
     passwords = open_file('passwords.txt', 'a')
     birthdays = open_file('birthdays.txt', 'a+')
-    codes = open_file('recoverycodes.txt', 'a')
     username = username_create()
     password = password_create()
     usernames.write('{0}'.format(username + '\n'))
