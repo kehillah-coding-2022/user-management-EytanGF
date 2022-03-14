@@ -64,7 +64,8 @@ def password_create():
             password = input()
         else:
             status = True
-    return password
+    hashed = hash = hashlib.md5(password.encode('utf-8')).hexdigest()
+    return hashed
 
 def after_register():
     print("You are now registered. Would you like to:")
@@ -119,9 +120,9 @@ def delete_account():
     usernames.close()
     passwords.close()
     birthdays.close()
-    usernames = open_file('usernames.txt', 'a')
-    passwords = open_file('passwords.txt', 'a')
-    birthdays = open_file('birthdays.txt', 'a+')
+    usernames = open_file('usernames.txt', 'w')
+    passwords = open_file('passwords.txt', 'w')
+    birthdays = open_file('birthdays.txt', 'w')
     del birthdays_list[i-1]
     del passwords_list[i-1]
     del usernames_list[i-1]
@@ -137,7 +138,7 @@ def delete_account():
     print('Please select an option:')
     print('1) Main menu')
     print('2) Exit')
-    resp = int(input)
+    resp = int(input())
     if resp == 1:
         main()
     if resp == 2:
@@ -244,7 +245,7 @@ def register():
     username = username_create()
     password = password_create()
     usernames.write('{0}'.format(username + '\n'))
-    passwords.write('{0}'.format(hash + '\n'))
+    passwords.write('{0}'.format(password + '\n'))
     birthdays.write('{0}'.format('a\n'))
     usernames.close()
     passwords.close()
@@ -367,7 +368,6 @@ def login():
                 sought_password = pline.strip()
                 break
             j = j + 1
-
         if hash == sought_password:
             return True
         else:
@@ -395,11 +395,13 @@ def login():
 
 def password_loop(password, sought_password):
     attempts = 3
+    hash = hashlib.md5(password.encode('utf-8')).hexdigest()
     while attempts > 0:
-        if password == sought_password:
+        if hash == sought_password:
             return True
         print('Incorrect password, please try again.')
         password = input()
+        hash = hashlib.md5(password.encode('utf-8')).hexdigest()
         attempts = attempts - 1
-    print('Maximum password attemps reached. Sorry.')
+    print('Maximum password attempts reached. Sorry.')
     return False
