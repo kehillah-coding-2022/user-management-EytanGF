@@ -1,6 +1,10 @@
 import hashlib
 import random
 import smtplib, ssl
+import time
+import sys
+import pwinput
+import progressbar
 
 
 def open_file(filename, mode):
@@ -387,6 +391,7 @@ def login():
         msg = code_create(6)
         str_msg = str(msg)
         if emailsend(email, 'pythonacctrecov@gmail.com', 'password1234!', 'Account Recovery Code', str_msg) == True:
+            animated_marker()
             reset_password(email)
     if resp == 2:
         pass
@@ -453,3 +458,12 @@ def password_loop(password, sought_password):
         attempts = attempts - 1
     print('Maximum password attempts reached. Sorry.')
     return False
+
+def animated_marker():
+
+    widgets = ['Loading: ', progressbar.AnimatedMarker()]
+    bar = progressbar.ProgressBar(widgets=widgets).start()
+
+    for i in range(25):
+        time.sleep(0.1)
+        bar.update(i)
