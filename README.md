@@ -4,6 +4,26 @@
 
 This code will allow the user to register an account that saves the email and password of the user. When logged in, the user can add/edit/view their birthday, delete their account and more. If the user forgets their password, this code will send a recovery email with a 6-digit recovery code to the user's email to reset their password.
 
+## Setup
+
+### Downloading `progressbar`
+
+To install the `progressbar` python library, simply run this simple command in your terminal of choice:
+
+#### Windows
+
+```python
+python pip install progressbar
+```
+
+#### Mac
+
+```python
+pip3 install progressbar
+```
+
+`hashlib`, `random`, `smtplib`, `ssl`, `time`, and `sys` are all part of the PSL (**P**ython **S**tandard **L**ibrary) so you don't need to download them.
+
 ## Functions
 
 Function | Description
@@ -28,6 +48,7 @@ Function | Description
 `add_edit_birthday` | add/edit a user's birthday
 `view_birthday` | let the user view their birthday; if they haven't create a birthday, tell them so
 `delete_account` | delete a user's account and all of their stored data
+`animated_marker` | activate a loading animation for the user's viewing while the recovery email is sending
 
 ## Files
 
