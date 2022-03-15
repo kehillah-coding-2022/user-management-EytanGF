@@ -316,7 +316,7 @@ def code_input_loop(code_input):
         if str(code_input) == str(msg):
             print('Verified')
             print('')
-            print('Working...')
+            animated_marker()
             print('')
             return True
         elif attempts == 0:
@@ -460,6 +460,9 @@ def password_loop(password, sought_password):
     return False
 
 def animated_marker():
+    """
+    loading animation while waiting for email to send
+    """
 
     widgets = ['Loading: ', progressbar.AnimatedMarker()]
     bar = progressbar.ProgressBar(widgets=widgets).start()
