@@ -3,7 +3,6 @@ import random
 import smtplib, ssl
 import time
 import sys
-import pwinput
 import progressbar
 
 
